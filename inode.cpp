@@ -48,6 +48,17 @@ void Inode_manager::get_inode() {
     queue<Inode*> inode_queue;
     disk_manager.read_disk(root, sizeof(Inode), sizeof(Inode)*index + 1024);
     inode_queue.push(root);
+    if(strcmp(root->name, "[ tj-os ") != 0) {
+        root->isdir = 0;
+        root->mode = 0;
+        root->offset = 0;
+        root->file_size = 0;
+        root->child_num = 0;
+        memset(root->d_addr, 0, sizeof(root->d_addr));
+        memset(root->child, 0, sizeof(root->child));
+        root->father = NULL;
+        strcpy(root->name, "[ tj-os ");
+    }
     while(!inode_queue.empty()) {
         Inode* front = inode_queue.front();
         inode_queue.pop();
@@ -161,10 +172,7 @@ void Inode_manager::delete_file(string name) {
             if(node->isdir == false) {
                 for(int j = 0; j < 10; ++j) {
                     if(node->d_addr[j] != 0) {
-                        Buffer* pb = buffer_manager.GetBlk(node->d_addr[j]);
-                        if (pb) {
-                            buffer_manager.Bclear(pb);
-                        }
+                        Free(node->d_addr[j]);
                     }
                 }
             }
@@ -413,8 +421,8 @@ int Inode_manager::Bmap(int lbn) {
 	else {
 		index = (lbn - 262) % 128;
 	}
-    second_pb = Alloc();
     phy_block_no = i_table[index];
+    second_pb = Alloc();
 	if (phy_block_no == 0 && second_pb != NULL) {
 		phy_block_no = second_pb->block_no;
 		i_table[index] = phy_block_no;
@@ -447,4 +455,17 @@ Buffer* Inode_manager::Alloc() {
 		buffer_manager.Bclear(pb);
 	}
 	return pb;
+}
+
+void Inode_manager::Free(int blkno) {
+    Buffer* pb = buffer_manager.GetBlk(blkno);
+    buffer_manager.Bclear(pb);
+	if (sb_manager.super_block->s_nfree >= 100) {
+		int *p = (int*)pb->buf;
+		*p++ = sb_manager.super_block->s_nfree;
+		memcpy(p, sb_manager.super_block->s_free, sizeof(int)*100);
+		sb_manager.super_block->s_nfree = 0;
+        disk_manager.write_disk(pb->buf, 512, pb->block_no*512);
+	}
+    sb_manager.super_block->s_free[sb_manager.super_block->s_nfree++] = blkno;
 }

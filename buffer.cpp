@@ -26,6 +26,10 @@ Buffer* Buffer_manager::GetBlk(int block_no) {
     Buffer* pb;
     if (buf_map.find(block_no) != buf_map.end()) {//先从已分配的找，看有没有
         pb = buf_map[block_no];
+        if(buf_blocks_queue.front() == pb) {
+            buf_blocks_queue.pop();
+            buf_blocks_queue.push(pb);
+        }
         return pb;
     }
     else if(buf_blocks_queue.size() < 100) {//看有没有继续分配的空闲空间

@@ -15,8 +15,8 @@ Disk_manager disk_manager;
 
 map<string, int> cmd_switch = {
     {"man", 1},    {"autotest", 2}, {"fformat", 3}, {"exit", 4},   {"ls", 5},
-    {"cd", 6},     {"mkdir", 7},    {"create", 8},  {"delete", 9}, {"open", 10},
-    {"close", 11}, {"write", 12},   {"read", 13},   {"seek", 14}
+    {"cd", 6},     {"mkdir", 7},    {"fcreat", 8},  {"fdelete", 9}, {"fopen", 10},
+    {"fclose", 11}, {"fwrite", 12},   {"fread", 13},   {"flseek", 14}
 };
 
 void man(string command) {
@@ -29,13 +29,13 @@ void man(string command) {
         "ls : 列出目录及文件\n"
         "cd : 改变目录\n"
         "mkdir : 新建目录\n"
-        "create : 新建文件\n"
-        "delete : 删除文件\n"
-        "open : 打开文件\n"
-        "close : 关闭文件\n"
-        "write : 写入文件\n"
-        "read : 读取文件\n"
-        "seek : 移动读写指针\n"
+        "fcreat : 新建文件\n"
+        "fdelete : 删除文件\n"
+        "fopen : 打开文件\n"
+        "fclose : 关闭文件\n"
+        "fwrite : 写入文件\n"
+        "fread : 读取文件\n"
+        "flseek : 移动读写指针\n"
         "示例 : man mkdir, 即查看mkdir的手册\n";
 
     static string autotest =
@@ -62,34 +62,34 @@ void man(string command) {
         "mkdir : 新建目录\n"
         "示例 : mkdir dir1, 即建立目录dir1, 不支持/dir1/dir2这种模式\n";
 
-    static string create =
-        "create : 新建文件\n"
-        "示例 : create file1, 即建立file1文件, 不支持/dir1/file1这种模式";
+    static string fcreat =
+        "fcreat : 新建文件\n"
+        "示例 : fcreat file1, 即建立file1文件, 不支持/dir1/file1这种模式";
 
     static string delet =
-        "delete : 删除文件\n"
-        "示例 : delete file1, 即删除file1文件, 不支持/dir1/file1这种模式";
+        "fdelete : 删除文件\n"
+        "示例 : fdelete file1, 即删除file1文件, 不支持/dir1/file1这种模式";
 
-    static string open =
-        "open : 打开文件\n"
-        "示例 : open file1, 即打开file1文件, 不支持/dir1/file1这种模式";
+    static string fopen =
+        "fopen : 打开文件\n"
+        "示例 : fopen file1, 即打开file1文件, 不支持/dir1/file1这种模式";
 
-    static string close =
-        "close : 关闭文件\n"
-        "示例 : close file1, 即关闭file1文件, 不支持/dir1/file1这种模式";
+    static string fclose =
+        "fclose : 关闭文件\n"
+        "示例 : fclose file1, 即关闭file1文件, 不支持/dir1/file1这种模式";
 
-    static string write =
-        "write : 写入文件\n"
-        "示例 : write file1 D:\\1.txt 800, 即从D:\\1.txt中读入800个字节到file1";
+    static string fwrite =
+        "fwrite : 写入文件\n"
+        "示例 : fwrite file1 D:\\1.txt 800, 即从D:\\1.txt中读入800个字节到file1";
 
-    static string read =
-        "read : 读取文件\n"
-        "示例1 : read file1 -o D:\\2.txt 800, 即读出file1的800个字节写入D:\\2.txt文件\n"
-        "示例2 : read file1 -f nofile 800, 即读出file1的800个字节到命令行\n";
+    static string fread =
+        "fread : 读取文件\n"
+        "示例1 : fread file1 -o D:\\2.txt 800, 即读出file1的800个字节写入D:\\2.txt文件\n"
+        "示例2 : fread file1 -f nofile 800, 即读出file1的800个字节到命令行\n";
 
-    static string seek =
-        "seek : 移动读写指针\n"
-        "示例 : seek file1 0 0, 即调整file1文件读写指针到文件开头, 参数含义除file名外与fseek一致";
+    static string flseek =
+        "flseek : 移动读写指针\n"
+        "示例 : flseek file1 0 0, 即调整file1文件读写指针到文件开头, 参数含义除file名外与fseek一致";
 
     static unordered_map<string, string*> cmd_map({
         {"man", &man},
@@ -99,13 +99,13 @@ void man(string command) {
         {"ls", &ls},
         {"cd", &cd},
         {"mkdir", &mkdir},
-        {"create", &create},
-        {"delete", &delet},
-        {"open", &open},
-        {"close", &close},
-        {"write", &write},
-        {"read", &read},
-        {"seek", &seek}
+        {"fcreat", &fcreat},
+        {"fdelete", &delet},
+        {"fopen", &fopen},
+        {"fclose", &fclose},
+        {"fwrite", &fwrite},
+        {"fread", &fread},
+        {"flseek", &flseek}
     });
 
     auto it = cmd_map.find(command);
@@ -123,31 +123,47 @@ int auto_test(string& cmd) {
         "mkdir etc",
         "mkdir home",
         "mkdir dev",
-        "mkdir test_del",
+        "fcreat test_del",
         "ls",
-        "delete test_del",
+        "fdelete test_del",
         "ls",
         "mkdir test",
         "cd test",
-        "create jerry",
-        "open jerry -rw",
-        "write jerry D:\\1.txt 800",
-        "seek jerry 500 0",
-        "read jerry -o D:\\out1.txt 500",
-        "close jerry",
+        "fcreat jerry",
+        "fopen jerry -rw",
+        "fwrite jerry D:\\1.txt 800",
+        "flseek jerry 500 0",
+        "fread jerry -o D:\\1_out.txt 500",
+        "fclose jerry",
         "cd ..",
         "cd home",
         "mkdir texts",
         "mkdir reports",
         "mkdir photos",
         "ls",
+        "cd texts",
+        "fcreat rea",
+        "fopen rea -rw",
+        "fwrite rea D:\\readme.txt 1018",
+        "flseek rea 0 0",
+        "fread rea -o D:\\2_out.txt 1018",
+        "fclose rea",
+        "cd ..",
         "cd reports",
-        "create readme",
-        "open readme -rw",
-        "write readme D:\\1.pdf 585728",
-        "seek readme 0 0",
-        "read readme -o D:\\out2.pdf 585728",
-        "close readme"
+        "fcreat rep",
+        "fopen rep -rw",
+        "fwrite rep D:\\1.pdf 267265",
+        "flseek rep 0 0",
+        "fread rep -o D:\\1_out.pdf 267265",
+        "fclose rep",
+        "cd ..",
+        "cd photos",
+        "fcreat cat",
+        "fopen cat -rw",
+        "fwrite cat D:\\1.jpg 26258",
+        "flseek cat 0 0",
+        "fread cat -o D:\\1_out.jpg 26258",
+        "fclose cat"
     };
     cmd = test_cmds[test_no % test_cmds.size()];
     return ++test_no % (test_cmds.size() + 1);

@@ -23,23 +23,24 @@ public:
 
 class Inode_manager {
 public:
-    Inode* root;
-    Inode* cur;
+    Inode* root;//根目录
+    Inode* cur;//当前目录
     Inode_manager();
     ~Inode_manager();
-    void get_inode();
-    string get_current_path();
-    void ls();
-    void mkdir(string name);
-    void cd(string name);
-    void create(string name);
-    void delete_file(string name);
-    void open_file(string name, string config);
-    void close_file(string name);
-    void write_file(string name, string filename, string str_size);
-    void read_file(string name, string isfile, string filename, string str_size);
-    void seek_file(string name, string str_offset, string str_origin);
-    int Bmap(int lbn);
-    Buffer* Alloc();
-    void save_inode();
+    void get_inode();//读取inode
+    string get_current_path();//获取当前路径
+    void ls();//列目录
+    void mkdir(string name);//创建目录
+    void cd(string name);//跳转目录
+    void create(string name);//新建文件
+    void delete_file(string name);//删除文件
+    void open_file(string name, string config);//打开文件
+    void close_file(string name);//关闭文件
+    void write_file(string name, string filename, string str_size);//写文件
+    void read_file(string name, string isfile, string filename, string str_size);//读文件
+    void seek_file(string name, string str_offset, string str_origin);//定位文件读写指针
+    int Bmap(int lbn);//逻辑块号与物理块号的转换
+    Buffer* Alloc();//分配磁盘
+    void Free(int blkno);//回收磁盘
+    void save_inode();//保存inode
 };
