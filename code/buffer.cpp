@@ -27,8 +27,7 @@ void Buffer_manager::save_buffer()
     }
 }
 
-Buffer *
-Buffer_manager::GetBlk(int block_no)
+Buffer *Buffer_manager::GetBlk(int block_no)
 {
     Buffer *pb;
     if (buf_map.find(block_no) != buf_map.end())
@@ -68,8 +67,7 @@ Buffer_manager::GetBlk(int block_no)
     }
 }
 
-Buffer *
-Buffer_manager::Bread(int block_no)
+Buffer *Buffer_manager::Bread(int block_no)
 {
     Buffer *pb = GetBlk(block_no);
     if (pb->is_need_write == true)
