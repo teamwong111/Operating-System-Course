@@ -17,7 +17,7 @@ It is my term porject repo of Operating-System-Course(2020-2021) in Tongji Unive
 ---
 
 ## Introduction
-This repo contain the term project of Tongji University's Operating System Course in 2020-2021. It is a file management. The supported commands are as follows:
+This repo contain the term project of Operating-System-Course(2020-2021) in Tongji University. It is a file management. The supported commands are as follows:
 
 1. man
 2. autotest
