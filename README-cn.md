@@ -1,19 +1,20 @@
 # Operating-System-Course
-这是我在同济大学操作系统课程（2021春）的大作业
+这是我在同济大学操作系统课程（2020-2021）的大作业
 
 ---
 
 ## 目录
 - [简介](#简介)
-- [项目目录结构](#项目目录结构)
-- [运行](#运行)
-- [维护者](#维护者)
+- [运行环境](#运行环境)
+- [截图](#截图)
+- [改进点](#改进点)
+- [贡献](#贡献)
 - [License](#License)
 
 ---
 
 ## 简介
-本仓库为包含同济大学2021年春操作系统课程的大作业，其支持的命令如下：
+本仓库为包含同济大学 2020-2021 操作系统课程的大作业，其支持的命令如下：
 1. man
 2. autotest
 3. fformat
@@ -30,34 +31,35 @@
 
 ---
 
-## 项目目录结构
-```bash
-.
-    buffer.cpp
-    buffer.h
-    disk.cpp
-    disk.h
-    inode.cpp
-    inode.h
-    LICENSE
-    main.cpp
-    super_block.cpp
-    super_block.h
-```
+## 运行环境
+- OS：Windows10
+- Compiler：g++ (i686-win32-dwarf-rev0, Built by MinGW-W64 project) 8.1.0
+- Editor: Visual Studio code
+- Encoding: UTF-8
+- Command：`g++ *.cpp -o D:\\filemanager.exe -g -Wall -static-libgcc -fexec-charset=GBK -std=c++11`
 
 ---
 
-## 运行
-- 操作系统：Windows10
-- 编译器：g++ (i686-win32-dwarf-rev0, Built by MinGW-W64 project) 8.1.0
-- 编译命令：g++ *.cpp -o D:\\filemanager.exe -g -Wall -static-libgcc -fexec-charset=GBK -std=c++11
+## 截图
+![测试](./resources/1.png)
+![测试](./resources/2.png)
 
 ---
 
-## 维护者
-该仓库目前的维护者为https://github.com/teamwong111
+## 改进点
+1. 支持 Linux 和 MacOS
+2. 支持更多命令
+3. 支持多色彩命令行
+4. ...
 
-如有侵权或其他问题请通过邮件联系wungjz1@gmail.com
+---
+
+## 贡献
+该仓库目前的维护者为 https://github.com/teamwong111
+
+如有侵权或其他问题请通过邮件联系 wungjz@outlook.com
+
+欢迎任何形式的贡献
 
 ---
 
